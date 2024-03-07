@@ -5,8 +5,10 @@ import {
     Route,
     RouterProvider,
 } from "react-router-dom";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/main.css";
+
 import App from "./App.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import ProductPage from "./pages/ProductPage.jsx";

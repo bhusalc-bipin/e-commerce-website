@@ -1,7 +1,10 @@
 const express = require("express");
+const cors = require("cors");
 const products = require("./data/products");
 
 const app = express();
+
+app.use(cors());
 
 app.get("/", (request, response) => {
     response.status(200).send("<h1>Hello, World</h1>");

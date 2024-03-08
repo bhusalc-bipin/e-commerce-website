@@ -1,8 +1,15 @@
 const express = require("express");
 const cors = require("cors");
+
+const logger = require("./utils/logger");
+const connectDB = require("./utils/db");
+
 const products = require("./data/products");
 
 const app = express();
+
+logger.info("connecting to MongoDB");
+connectDB();
 
 app.use(cors());
 

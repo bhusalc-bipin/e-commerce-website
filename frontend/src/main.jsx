@@ -5,6 +5,7 @@ import {
     Route,
     RouterProvider,
 } from "react-router-dom";
+import { Provider } from "react-redux";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/main.css";
@@ -12,6 +13,7 @@ import "./styles/main.css";
 import App from "./App.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import ProductPage from "./pages/ProductPage.jsx";
+import store from "./store.js";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -23,5 +25,7 @@ const router = createBrowserRouter(
 );
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-    <RouterProvider router={router} />
+    <Provider store={store}>
+        <RouterProvider router={router} />
+    </Provider>
 );

@@ -10,6 +10,7 @@ const {
 } = require("./middleware/errorMiddleware");
 const productsRouter = require("./routes/productRoutes");
 const usersRouter = require("./routes/userRoutes");
+const ordersRouter = require("./routes/orderRoutes");
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use("/api/products", productsRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/orders", ordersRouter);
 
 app.use(errorHandler);
 app.use(unknownEndpoint);

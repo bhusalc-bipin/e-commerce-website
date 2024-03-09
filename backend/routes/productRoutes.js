@@ -3,6 +3,9 @@ const productsRouter = require("express").Router();
 const Product = require("../models/productModel");
 const asyncHandler = require("../middleware/asyncHandler");
 
+// @desc    Fetch all products
+// @route   GET /api/products
+// @access  Public
 productsRouter.get(
     "/",
     asyncHandler(async (request, response) => {
@@ -11,6 +14,9 @@ productsRouter.get(
     })
 );
 
+// @desc    Fetch single product
+// @route   GET /api/products/:id
+// @access  Public
 productsRouter.get(
     "/:id",
     asyncHandler(async (request, response) => {

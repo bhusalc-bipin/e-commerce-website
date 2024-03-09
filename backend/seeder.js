@@ -1,6 +1,4 @@
-const mongoose = require("mongoose");
-
-const users = require("./data/users");
+const getUsers = require("./data/users");
 const products = require("./data/products");
 const User = require("./models/userModel");
 const Product = require("./models/productModel");
@@ -15,6 +13,7 @@ const importData = async () => {
         await Product.deleteMany();
         await User.deleteMany();
 
+        const users = await getUsers();
         const createdUsers = await User.insertMany(users);
 
         const adminUser = createdUsers[0]._id;

@@ -70,15 +70,16 @@ ordersRouter.get(
     verifyUserLoggedIn,
     asyncHandler(async (request, response) => {
         const order = await Order.findById(request.params.id).populate(
-            "user",
+            "buyer",
             "name email"
         );
 
-        if (!order) {
-            response.status(400);
+        if (order) {
+            response.status(200).json(order);
+        } else {
+            response.status(404);
             throw new Error("order not found");
         }
-        response.status(200).json(order);
     })
 );
 

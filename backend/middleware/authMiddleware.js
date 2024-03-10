@@ -15,17 +15,19 @@ const verifyUserLoggedIn = asyncHandler(async (request, response, next) => {
             response.status(401);
             throw new Error("not authorized, token failed");
         }
+    } else {
+        response.status(401);
+        throw new Error("not authorized, no token");
     }
-    response.status(401);
-    throw new Error("not authorized, no token");
 });
 
 const verifyAdminAccess = (request, response, next) => {
     if (request.user && request.user.isAdmin) {
         next();
+    } else {
+        response.status(401);
+        throw new Error("admin access needed");
     }
-    response.status(401);
-    throw new Error("admin access needed");
 };
 
 module.exports = { verifyUserLoggedIn, verifyAdminAccess };

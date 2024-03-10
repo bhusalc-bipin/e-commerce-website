@@ -12,7 +12,7 @@ const generateToken = (response, id) => {
         httpOnly: true,
         secure: config.NODE_ENV !== "development",
         sameSite: "strict",
-        maxAge: 60 * 60, // 1 hr
+        maxAge: 60 * 60 * 1000, // 1 hr
     });
 };
 

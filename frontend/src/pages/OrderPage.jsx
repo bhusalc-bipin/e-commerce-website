@@ -33,7 +33,7 @@ const OrderPage = () => {
                 <Col md={8}>
                     <ListGroup variant="flush">
                         <ListGroup.Item>
-                            <h2>Shipping</h2>
+                            <h2>Shipping Address</h2>
                             <p>
                                 <strong>Name: </strong> {order.buyer.name}
                             </p>
@@ -58,7 +58,7 @@ const OrderPage = () => {
                             )}
                         </ListGroup.Item>
                         <ListGroup.Item>
-                            <h2>Payment Methdod</h2>
+                            <h2>Payment Method</h2>
                             <p>
                                 <strong>Method: </strong> {order.paymentMethod}
                             </p>

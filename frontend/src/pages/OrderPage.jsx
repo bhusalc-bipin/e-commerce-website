@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
     Row,
@@ -8,9 +9,17 @@ import {
     Button,
     Card,
 } from "react-bootstrap";
+import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-import { useGetOrderDetailsQuery } from "../slices/ordersApiSlice";
+import {
+    useGetOrderDetailsQuery,
+    usePayOrderMutation,
+    useGetPayPalClientIdQuery,
+} from "../slices/ordersApiSlice";
 
 const OrderPage = () => {
     const { id: orderId } = useParams();
@@ -21,6 +30,64 @@ const OrderPage = () => {
         isLoading,
         error,
     } = useGetOrderDetailsQuery(orderId);
+
+    const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
+    const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
+
+    const {
+        data: paypal,
+        isLoading: loadingPayPal,
+        error: errorPayPal,
+    } = useGetPayPalClientIdQuery();
+
+    const { userInfo } = useSelector((state) => state.auth);
+
+    useEffect(() => {
+        if (!errorPayPal && !loadingPayPal && paypal.clientId) {
+            const loadPayPalScript = async () => {
+                paypalDispatch({
+                    type: "resetOptions",
+                    value: {
+                        "client-id": paypal.clientId,
+                        currency: "USA",
+                    },
+                });
+                paypalDispatch({ type: "setLoadingStatus", value: "pending" });
+            };
+
+            if (order && !order.isPaid) {
+                if (!window.paypal) {
+                    loadPayPalScript();
+                }
+            }
+        }
+    }, [order, paypal, errorPayPal, loadingPayPal, paypalDispatch]);
+
+    const onApprove = (data, actions) =>
+        actions.order.capture().then(async function (details) {
+            try {
+                await payOrder({ orderId, details });
+                refetch();
+                toast.success("Payment successful");
+            } catch (error) {
+                toast.error(error.data?.message || error.error);
+            }
+        });
+
+    const onApproveTest = async () => {
+        await payOrder({ orderId, details: { payer: {} } });
+        refetch();
+        toast.success("Payment successful");
+    };
+
+    const onError = (error) => toast.error(error.error);
+
+    const createOrder = (data, actions) =>
+        actions.order
+            .create({
+                purchase_units: [{ amount: { value: order.totalPrice } }],
+            })
+            .then((orderId) => orderId);
 
     return isLoading ? (
         <Loader />
@@ -123,7 +190,24 @@ const OrderPage = () => {
                                 <Col>${order.totalPrice}</Col>
                             </Row>
                         </ListGroup.Item>
-                        {/* PAY ORDER PLACEHOLDER */}
+                        {!order.isPaid && (
+                            <ListGroup.Item>
+                                {loadingPay && <Loader />}
+                                {isPending ? (
+                                    <Loader />
+                                ) : (
+                                    <div>
+                                        <div>
+                                            <PayPalButtons
+                                                createOrder={createOrder}
+                                                onApprove={onApprove}
+                                                onError={onError}
+                                            ></PayPalButtons>
+                                        </div>
+                                    </div>
+                                )}
+                            </ListGroup.Item>
+                        )}
                         {/* MARK AS DELIVERED PLACEHOLDER */}
                     </ListGroup>
                 </Col>

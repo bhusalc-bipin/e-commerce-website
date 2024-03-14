@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import { Provider } from "react-redux";
 
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/main.css";
 
@@ -45,6 +46,8 @@ const router = createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <Provider store={store}>
-        <RouterProvider router={router} />
+        <PayPalScriptProvider>
+            <RouterProvider router={router} />
+        </PayPalScriptProvider>
     </Provider>
 );

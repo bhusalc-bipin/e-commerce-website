@@ -11,6 +11,7 @@ const {
 const productsRouter = require("./routes/productRoutes");
 const usersRouter = require("./routes/userRoutes");
 const ordersRouter = require("./routes/orderRoutes");
+const config = require("./utils/config");
 
 const app = express();
 
@@ -24,6 +25,10 @@ app.use(cookieParser());
 app.use("/api/products", productsRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/orders", ordersRouter);
+
+app.get("/api/config/paypal", (request, response) =>
+    response.send({ paypalClientID: config.PAYPAL_CLIENT_ID })
+);
 
 app.use(errorHandler);
 app.use(unknownEndpoint);

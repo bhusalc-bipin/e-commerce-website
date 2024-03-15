@@ -19,6 +19,7 @@ import {
     useGetOrderDetailsQuery,
     usePayOrderMutation,
     useGetPayPalClientIdQuery,
+    useDeliverOrderMutation,
 } from "../slices/ordersApiSlice";
 
 const OrderPage = () => {
@@ -33,6 +34,9 @@ const OrderPage = () => {
 
     const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
     const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
+
+    const [deliverOrder, { isLoading: loadingDeliver }] =
+        useDeliverOrderMutation();
 
     const {
         data: paypal,
@@ -82,6 +86,16 @@ const OrderPage = () => {
                 purchase_units: [{ amount: { value: order.totalPrice } }],
             })
             .then((orderId) => orderId);
+
+    const deliverOrderHandler = async () => {
+        try {
+            await deliverOrder(orderId);
+            refetch();
+            toast.success("Order delivered");
+        } catch (error) {
+            toast.error(error.data?.message || error.error);
+        }
+    };
 
     return isLoading ? (
         <Loader />
@@ -203,7 +217,21 @@ const OrderPage = () => {
                                 )}
                             </ListGroup.Item>
                         )}
-                        {/* MARK AS DELIVERED PLACEHOLDER */}
+                        {loadingDeliver && <Loader />}
+                        {userInfo &&
+                            userInfo.isAdmin &&
+                            order.isPaid &&
+                            !order.isDelivered && (
+                                <ListGroup.Item>
+                                    <Button
+                                        type="button"
+                                        className="btn btn-block"
+                                        onClick={deliverOrderHandler}
+                                    >
+                                        Mark as Delivered
+                                    </Button>
+                                </ListGroup.Item>
+                            )}
                     </ListGroup>
                 </Col>
             </Row>

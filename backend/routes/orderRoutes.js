@@ -119,7 +119,16 @@ ordersRouter.put(
     verifyUserLoggedIn,
     verifyAdminAccess,
     asyncHandler(async (request, response) => {
-        response.status(200).json("update order to delivered");
+        const order = await Order.findById(request.params.id);
+
+        if (order) {
+            (order.isDelivered = true), (order.deliveredAt = Date.now());
+            const updatedOrder = await order.save();
+            response.status(200).json(updatedOrder);
+        } else {
+            response.status(400);
+            throw new Error("order not found");
+        }
     })
 );
 
@@ -131,7 +140,8 @@ ordersRouter.get(
     verifyUserLoggedIn,
     verifyAdminAccess,
     asyncHandler(async (request, response) => {
-        response.status(200).json("get all orders");
+        const orders = await Order.find({}).populate("buyer", "id name");
+        response.status(200).json(orders);
     })
 );
 

@@ -74,12 +74,6 @@ const OrderPage = () => {
             }
         });
 
-    const onApproveTest = async () => {
-        await payOrder({ orderId, details: { payer: {} } });
-        refetch();
-        toast.success("Payment successful");
-    };
-
     const onError = (error) => toast.error(error.error);
 
     const createOrder = (data, actions) =>
@@ -116,7 +110,8 @@ const OrderPage = () => {
                             </p>
                             {order.isDelivered ? (
                                 <Message variant="success">
-                                    Delivered on {order.deliveredAt}
+                                    Delivered on{" "}
+                                    {order.deliveredAt.substring(0, 10)}
                                 </Message>
                             ) : (
                                 <Message variant="danger">
@@ -131,7 +126,7 @@ const OrderPage = () => {
                             </p>
                             {order.isPaid ? (
                                 <Message variant="success">
-                                    Paid on {order.paidAt}
+                                    Paid on {order.paidAt.substring(0, 10)}
                                 </Message>
                             ) : (
                                 <Message variant="danger">Not Paid</Message>

@@ -1,14 +1,6 @@
 import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import {
-    Row,
-    Col,
-    ListGroup,
-    Image,
-    Form,
-    Button,
-    Card,
-} from "react-bootstrap";
+import { Row, Col, ListGroup, Image, Button, Card } from "react-bootstrap";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
@@ -177,62 +169,64 @@ const OrderPage = () => {
                     </ListGroup>
                 </Col>
                 <Col md={4}>
-                    <ListGroup variant="flush">
-                        <ListGroup.Item>
-                            <h2>Order Summary</h2>
-                        </ListGroup.Item>
-                        <ListGroup.Item>
-                            <Row>
-                                <Col>Subtotal</Col>
-                                <Col>${order.itemsPrice}</Col>
-                            </Row>
-                            <Row>
-                                <Col>Shipping</Col>
-                                <Col>${order.shippingPrice}</Col>
-                            </Row>
-                            <Row>
-                                <Col>Tax</Col>
-                                <Col>${order.taxPrice}</Col>
-                            </Row>
-                            <Row>
-                                <Col>Total</Col>
-                                <Col>${order.totalPrice}</Col>
-                            </Row>
-                        </ListGroup.Item>
-                        {!order.isPaid && (
+                    <Card>
+                        <ListGroup variant="flush">
                             <ListGroup.Item>
-                                {loadingPay && <Loader />}
-                                {isPending ? (
-                                    <Loader />
-                                ) : (
-                                    <div>
-                                        <div>
-                                            <PayPalButtons
-                                                createOrder={createOrder}
-                                                onApprove={onApprove}
-                                                onError={onError}
-                                            ></PayPalButtons>
-                                        </div>
-                                    </div>
-                                )}
+                                <h2>Order Summary</h2>
                             </ListGroup.Item>
-                        )}
-                        {loadingDeliver && <Loader />}
-                        {userInfo &&
-                            userInfo.isAdmin &&
-                            order.isPaid &&
-                            !order.isDelivered && (
+                            <ListGroup.Item>
+                                <Row>
+                                    <Col>Subtotal</Col>
+                                    <Col>${order.itemsPrice}</Col>
+                                </Row>
+                                <Row>
+                                    <Col>Shipping</Col>
+                                    <Col>${order.shippingPrice}</Col>
+                                </Row>
+                                <Row>
+                                    <Col>Tax</Col>
+                                    <Col>${order.taxPrice}</Col>
+                                </Row>
+                                <Row>
+                                    <Col>Total</Col>
+                                    <Col>${order.totalPrice}</Col>
+                                </Row>
+                            </ListGroup.Item>
+                            {!order.isPaid && (
                                 <ListGroup.Item>
-                                    <Button
-                                        type="button"
-                                        className="btn btn-block"
-                                        onClick={deliverOrderHandler}
-                                    >
-                                        Mark as Delivered
-                                    </Button>
+                                    {loadingPay && <Loader />}
+                                    {isPending ? (
+                                        <Loader />
+                                    ) : (
+                                        <div>
+                                            <div>
+                                                <PayPalButtons
+                                                    createOrder={createOrder}
+                                                    onApprove={onApprove}
+                                                    onError={onError}
+                                                ></PayPalButtons>
+                                            </div>
+                                        </div>
+                                    )}
                                 </ListGroup.Item>
                             )}
-                    </ListGroup>
+                            {loadingDeliver && <Loader />}
+                            {userInfo &&
+                                userInfo.isAdmin &&
+                                order.isPaid &&
+                                !order.isDelivered && (
+                                    <ListGroup.Item>
+                                        <Button
+                                            type="button"
+                                            className="btn btn-block"
+                                            onClick={deliverOrderHandler}
+                                        >
+                                            Mark as Delivered
+                                        </Button>
+                                    </ListGroup.Item>
+                                )}
+                        </ListGroup>
+                    </Card>
                 </Col>
             </Row>
         </>

@@ -52,23 +52,22 @@ const ProductEditPage = () => {
 
     const submitHandler = async (e) => {
         e.preventDefault();
-        const updatedProduct = {
-            productId,
-            name,
-            price,
-            image,
-            brand,
-            category,
-            countInStock,
-            description,
-        };
-
-        const result = await updateProduct(updatedProduct);
-        if (result.error) {
-            toast.error(result.error);
-        } else {
+        try {
+            await updateProduct({
+                productId,
+                name,
+                price,
+                image,
+                brand,
+                category,
+                description,
+                countInStock,
+            }).unwrap();
             toast.success("Product updated");
+            refetch();
             navigate("/admin/productlist");
+        } catch (error) {
+            toast.error(error.data?.message || error.error);
         }
     };
 

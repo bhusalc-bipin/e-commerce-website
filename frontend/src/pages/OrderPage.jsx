@@ -102,10 +102,16 @@ const OrderPage = () => {
                         <ListGroup.Item>
                             <h2>Shipping Address</h2>
                             <p>
-                                <strong>Name: </strong> {order.buyer.name}
+                                <strong>Name: </strong>{" "}
+                                {order.buyer
+                                    ? order.buyer.name
+                                    : "Deleted User"}
                             </p>
                             <p>
-                                <strong>Email: </strong> {order.buyer.email}
+                                <strong>Email: </strong>{" "}
+                                {order.buyer
+                                    ? order.buyer.email
+                                    : "Deleted User"}
                             </p>
                             <p>
                                 <strong>Address: </strong>{" "}

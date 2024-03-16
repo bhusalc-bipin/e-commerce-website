@@ -34,7 +34,11 @@ const OrderListPage = () => {
                         {orders.map((order) => (
                             <tr key={order._id}>
                                 <td>{order._id}</td>
-                                <td>{order.buyer && order.buyer.name}</td>
+                                <td>
+                                    {order.buyer
+                                        ? order.buyer.name
+                                        : "Deleted User"}
+                                </td>
                                 <td>{order.createdAt.substring(0, 10)}</td>
                                 <td>${order.totalPrice}</td>
                                 <td>

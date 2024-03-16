@@ -154,7 +154,8 @@ usersRouter.get(
     verifyUserLoggedIn,
     verifyAdminAccess,
     asyncHandler(async (request, response) => {
-        response.status(200).send("get all users (admin)");
+        const users = await User.find({});
+        response.status(200).json(users);
     })
 );
 
@@ -166,7 +167,19 @@ usersRouter.delete(
     verifyUserLoggedIn,
     verifyAdminAccess,
     asyncHandler(async (request, response) => {
-        response.status(200).send("delete a user (admin)");
+        const user = await User.findById(request.params.id);
+
+        if (user) {
+            if (user.isAdmin) {
+                response.status(400);
+                throw new Error("cannot delete admin user");
+            }
+            await User.deleteOne({ _id: user._id });
+            response.status(200).json({ message: "user deleted successfully" });
+        } else {
+            response.status(404);
+            throw new Error("user not found");
+        }
     })
 );
 
@@ -178,7 +191,15 @@ usersRouter.get(
     verifyUserLoggedIn,
     verifyAdminAccess,
     asyncHandler(async (request, response) => {
-        response.status(200).send("get a user by id (admin)");
+        const user = await User.findById(request.params.id).select(
+            "-passwordHash"
+        );
+        if (user) {
+            response.status(200).json(user);
+        } else {
+            response.status(404);
+            throw new Error("User not found");
+        }
     })
 );
 
@@ -190,7 +211,25 @@ usersRouter.put(
     verifyUserLoggedIn,
     verifyAdminAccess,
     asyncHandler(async (request, response) => {
-        response.status(200).send("update a user (admin)");
+        const user = await User.findById(request.params.id);
+
+        if (user) {
+            user.name = request.body.name || user.name;
+            user.email = request.body.email || user.email;
+            user.isAdmin = Boolean(request.body.isAdmin) || user.isAdmin;
+
+            const updatedUser = await user.save();
+
+            response.status(200).json({
+                _id: updatedUser._id,
+                name: updatedUser.name,
+                email: updatedUser.email,
+                isAdmin: updatedUser.isAdmin,
+            });
+        } else {
+            response.status(404);
+            throw new Error("User not found");
+        }
     })
 );
 

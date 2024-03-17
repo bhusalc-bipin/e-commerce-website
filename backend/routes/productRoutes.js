@@ -29,7 +29,7 @@ productsRouter.get(
             return response.status(200).json(product);
         }
         response.status(404);
-        throw new Error("Resource not found");
+        throw new Error("Product not found");
     })
 );
 
@@ -91,7 +91,7 @@ productsRouter.put(
             response.status(200).json(updatedProduct);
         } else {
             response.status(404);
-            throw new Error("Resource not found");
+            throw new Error("Product not found");
         }
     })
 );
@@ -111,7 +111,53 @@ productsRouter.delete(
             response.status(200).json({ message: "Product deleted" });
         } else {
             response.status(404);
-            throw new Error("Resource not found");
+            throw new Error("Product not found");
+        }
+    })
+);
+
+// @desc    Create a new review
+// @route   POST /api/products/:id/reviews
+// @access  Private
+productsRouter.post(
+    "/:id/reviews",
+    verifyUserLoggedIn,
+    asyncHandler(async (request, response) => {
+        const { rating, comment } = request.body;
+
+        const product = await Product.findById(request.params.id);
+
+        if (product) {
+            const alreadyReviewed = product.reviews.find(
+                (review) =>
+                    review.authorId.toString() === request.user._id.toString()
+            );
+
+            if (alreadyReviewed) {
+                response.status(400);
+                throw new Error("Product already reviewed");
+            }
+
+            const review = {
+                authorId: request.user._id,
+                authorName: request.user.name,
+                rating: Number(rating),
+                comment,
+            };
+
+            product.reviews.push(review);
+            product.numReviews = product.reviews.length;
+            product.rating =
+                product.reviews.reduce(
+                    (acc, review) => acc + review.rating,
+                    0
+                ) / product.reviews.length;
+
+            await product.save();
+            response.status(201).json({ message: "Review added" });
+        } else {
+            response.status(404);
+            throw new Error("Product not found");
         }
     })
 );

@@ -31,6 +31,17 @@ productsRouter.get(
     })
 );
 
+// @desc    Get top rated products
+// @route   GET /api/products/top
+// @access  Public
+productsRouter.get(
+    "/top",
+    asyncHandler(async (request, response) => {
+        const products = await Product.find({}).sort({ rating: -1 }).limit(3);
+        response.status(200).json(products);
+    })
+);
+
 // @desc    Fetch single product
 // @route   GET /api/products/:id
 // @access  Public

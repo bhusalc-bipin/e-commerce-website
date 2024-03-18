@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import Rating from "../components/Rating";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
+import Meta from "../components/Meta";
 
 import {
     useGetProductDetailsQuery,
@@ -76,6 +77,7 @@ const ProductPage = () => {
                 </Message>
             ) : (
                 <>
+                    <Meta title={product.name} />
                     <Row>
                         <Col md={5}>
                             <Image

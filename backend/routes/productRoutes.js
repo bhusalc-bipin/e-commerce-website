@@ -6,6 +6,7 @@ const {
     verifyUserLoggedIn,
     verifyAdminAccess,
 } = require("../middleware/authMiddleware");
+const config = require("../utils/config");
 
 // @desc    Fetch all products
 // @route   GET /api/products
@@ -13,7 +14,7 @@ const {
 productsRouter.get(
     "/",
     asyncHandler(async (request, response) => {
-        const pageSize = 8;
+        const pageSize = config.PAGINATION_LIMIT;
         const page = Number(request.query.pageNumber) || 1;
 
         const keyword = request.query.keyword

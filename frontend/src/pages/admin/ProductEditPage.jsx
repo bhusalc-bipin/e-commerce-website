@@ -67,7 +67,8 @@ const ProductEditPage = () => {
             refetch();
             navigate("/admin/productlist");
         } catch (error) {
-            toast.error(error.data?.message || error.error);
+            console.log(error);
+            toast.error(error.data?.error || error.error);
         }
     };
 
@@ -79,7 +80,7 @@ const ProductEditPage = () => {
             toast.success(res.message);
             setImage(res.image);
         } catch (error) {
-            toast.error(error.data?.message || error.error);
+            toast.error(error.data?.error || error.error);
         }
     };
 
@@ -95,7 +96,7 @@ const ProductEditPage = () => {
                     <Loader />
                 ) : error ? (
                     <Message variant="danger">
-                        {error.data?.message || error.error}
+                        {error.data?.error || error.error}
                     </Message>
                 ) : (
                     <Form onSubmit={submitHandler}>

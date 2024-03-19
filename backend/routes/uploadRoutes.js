@@ -20,31 +20,38 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (request, file, callback) => {
-    const filetypes = /jpg|jpeg|png/;
+    const filetypes = /jpe?g|png/;
+    const mimetypes = /image\/jpe?g|image\/png/;
+
     const extname = filetypes.test(
         path.extname(file.originalname).toLowerCase()
     );
-    const mimetype = filetypes.test(file.mimetype);
+    const mimetype = mimetypes.test(file.mimetype);
+
     if (extname && mimetype) {
-        return callback(null, true);
+        callback(null, true);
+    } else {
+        callback(new Error("jpg, jpeg and png format only!"), false);
     }
-    callback(new Error("Only jpg, jpeg and png file format are accepted."));
 };
 
-const upload = multer({
-    storage,
-    fileFilter,
-});
+const upload = multer({ storage, fileFilter });
+const uploadSingleImage = upload.single("image");
 
 uploadRouter.post(
     "/",
     verifyUserLoggedIn,
     verifyAdminAccess,
-    upload.single("image"),
     (request, response) => {
-        response.status(200).send({
-            message: "Image uploaded",
-            image: `/${request.file.path}`,
+        uploadSingleImage(request, response, function (error) {
+            if (error) {
+                return response.status(400).json({ error: error.message });
+            }
+
+            response.status(200).json({
+                message: "Image uploaded successfully",
+                image: `/${request.file.path}`,
+            });
         });
     }
 );

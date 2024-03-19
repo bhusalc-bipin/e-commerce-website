@@ -48,7 +48,7 @@ const ProfilePage = () => {
                 dispatch(setCredentials(res));
                 toast.success("Profile updated successfully");
             } catch (error) {
-                toast.error(error.data?.message || error.error);
+                toast.error(error.data?.error || error.error);
             }
         }
     };
@@ -111,7 +111,7 @@ const ProfilePage = () => {
                     <Loader />
                 ) : error ? (
                     <Message variant="danger">
-                        {error?.data?.message || error.error}
+                        {error?.data?.error || error.error}
                     </Message>
                 ) : (
                     <Table striped hover responsive className="table-sm">

@@ -45,7 +45,7 @@ const UserEditPage = () => {
             refetch();
             navigate("/admin/userlist");
         } catch (error) {
-            toast.error(error.data?.message || error.error);
+            toast.error(error.data?.error || error.error);
         }
     };
 
@@ -61,7 +61,7 @@ const UserEditPage = () => {
                     <Loader />
                 ) : error ? (
                     <Message variant="danger">
-                        {error.data?.message || error.error}
+                        {error.data?.error || error.error}
                     </Message>
                 ) : (
                     <Form onSubmit={submitHandler}>

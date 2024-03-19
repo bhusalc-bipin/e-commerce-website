@@ -15,7 +15,7 @@ const OrderListPage = () => {
                 <Loader />
             ) : error ? (
                 <Message variant="danger">
-                    {error.data?.message || error.error}
+                    {error.data?.error || error.error}
                 </Message>
             ) : (
                 <Table striped hover responsive className="table-sm">

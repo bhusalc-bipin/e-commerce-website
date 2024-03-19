@@ -66,7 +66,7 @@ const OrderPage = () => {
                 refetch();
                 toast.success("Payment successful");
             } catch (error) {
-                toast.error(error.data?.message || error.error);
+                toast.error(error.data?.error || error.error);
             }
         });
 
@@ -85,14 +85,14 @@ const OrderPage = () => {
             refetch();
             toast.success("Order delivered");
         } catch (error) {
-            toast.error(error.data?.message || error.error);
+            toast.error(error.data?.error || error.error);
         }
     };
 
     return isLoading ? (
         <Loader />
     ) : error ? (
-        <Message variant="danger" />
+        <Message variant="danger">{error.data?.error || error.error}</Message>
     ) : (
         <>
             <h1>Order {order._id}</h1>

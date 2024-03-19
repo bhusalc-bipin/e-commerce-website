@@ -73,7 +73,7 @@ const ProductPage = () => {
                 <Loader />
             ) : error ? (
                 <Message variant="danger">
-                    {error?.data?.message || error.error}
+                    {error?.data?.error || error.error}
                 </Message>
             ) : (
                 <>

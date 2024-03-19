@@ -29,7 +29,7 @@ const ProductListPage = () => {
                 await createProduct();
                 refetch();
             } catch (error) {
-                toast.error(error.data?.message || error.error);
+                toast.error(error.data?.error || error.error);
             }
         }
     };
@@ -44,7 +44,7 @@ const ProductListPage = () => {
                 toast.success("Product deleted");
                 refetch();
             } catch (error) {
-                toast.error(error.data?.message || error.error);
+                toast.error(error.data?.error || error.error);
             }
         }
     };
@@ -69,7 +69,7 @@ const ProductListPage = () => {
                 <Loader />
             ) : error ? (
                 <Message variant="danger">
-                    {error.data?.message || error.error}
+                    {error.data?.error || error.error}
                 </Message>
             ) : (
                 <>

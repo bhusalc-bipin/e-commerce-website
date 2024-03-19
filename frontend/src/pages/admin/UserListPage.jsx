@@ -22,7 +22,7 @@ const UserListPage = () => {
                 toast.success("User deleted");
                 refetch();
             } catch (error) {
-                toast.error(error.data?.message || error.error);
+                toast.error(error.data?.error || error.error);
             }
         }
     };
@@ -35,7 +35,7 @@ const UserListPage = () => {
                 <Loader />
             ) : error ? (
                 <Message variant="danger">
-                    {error.data?.message || error.error}
+                    {error.data?.error || error.error}
                 </Message>
             ) : (
                 <Table striped hover responsive className="table-sm">

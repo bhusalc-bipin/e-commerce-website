@@ -63,6 +63,13 @@ const LoginPage = () => {
                         onChange={(e) => setPassword(e.target.value)}
                     ></Form.Control>
                 </Form.Group>
+                <Form.Group className="my-3">
+                    <Form.Label>
+                        For the demo of admin features use john@email.com as
+                        email address and 123 as password.
+                    </Form.Label>
+                </Form.Group>
+
                 <Button
                     type="submit"
                     variant="primary"
